@@ -232,3 +232,43 @@ function moveRight() {
     }
     return moved;
 }
+// 添加触摸事件监听
+const gridContainer = document.getElementById('grid-container');
+let startX, startY, endX, endY;
+
+// 触摸开始
+gridContainer.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].pageX;
+    startY = e.touches[0].pageY;
+});
+
+// 触摸结束
+gridContainer.addEventListener('touchend', (e) => {
+    endX = e.changedTouches[0].pageX;
+    endY = e.changedTouches[0].pageY;
+
+    const deltaX = endX - startX;
+    const deltaY = endY - startY;
+
+    // 判断滑动方向
+    if (Math.abs(deltaX) > Math.abs(deltaY)) { // 水平滑动
+        if (deltaX > 0) {
+            moveRight(); // 向右滑动
+        } else {
+            moveLeft(); // 向左滑动
+        }
+    } else { // 垂直滑动
+        if (deltaY > 0) {
+            moveDown(); // 向下滑动
+        } else {
+            moveUp(); // 向上滑动
+        }
+    }
+
+    // 生成新数字并更新界面
+    generateNewNumber();
+    updateBoard();
+    if (isGameOver()) {
+        document.getElementById('gameover-container').style.display = 'block';
+    }
+});
